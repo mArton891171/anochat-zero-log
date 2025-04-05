@@ -1,27 +1,21 @@
-const themes = {
-    dark: `
-      body { background-color: #0d0d0d; color: #e0e0e0; }
-      input { background-color: #2e2e2e; color: #fff; }
-      button { background-color: #00ffcc; color: #000; }
-      button:hover { background-color: #00ccaa; }
-      .me { color: #00bfff; }
-      .partner { color: #ff66cc; }
-    `,
-    light: `
-      body { background-color: #f2f2f2; color: #222; }
-      input { background-color: #fff; color: #000; }
-      button { background-color: #333; color: #fff; }
-      button:hover { background-color: #000; }
-      .me { color: #007acc; }
-      .partner { color: #cc007a; }
-    `
-  };
+function acceptDisclaimer() {
+    localStorage.setItem('anochat_disclaimer_accepted', 'true');
+    document.getElementById('disclaimerModal').style.display = 'none';
+  }
   
   function applyTheme(theme) {
     document.getElementById('theme-style')?.remove();
     const style = document.createElement('style');
     style.id = 'theme-style';
-    style.textContent = themes[theme];
+    style.textContent = theme === 'dark' ? `
+      body { background-color: #0d0d0d; color: #e0e0e0; }
+      input, #messages { background-color: #2e2e2e; color: #fff; }
+      button { background-color: #00ffcc; color: #000; }
+    ` : `
+      body { background-color: #ffffff; color: #000000; }
+      input, #messages { background-color: #f0f0f0; color: #000; }
+      button { background-color: #333; color: #fff; }
+    `;
     document.head.appendChild(style);
     localStorage.setItem('anochat-theme', theme);
     document.getElementById('themeBtn').innerText = theme === 'dark' ? 'Világos mód' : 'Sötét mód';
@@ -32,25 +26,17 @@ const themes = {
     applyTheme(current === 'dark' ? 'light' : 'dark');
   }
   
-  function acceptDisclaimer() {
-    localStorage.setItem('anochat_disclaimer_accepted', 'true');
-    document.getElementById('disclaimerModal').style.display = 'none';
-  }
-  
   window.addEventListener('load', () => {
     applyTheme(localStorage.getItem('anochat-theme') || 'dark');
     if (localStorage.getItem('anochat_disclaimer_accepted') !== 'true') {
       document.getElementById('disclaimerModal').style.display = 'flex';
       document.getElementById('chat').style.display = 'none';
-    } else {
-      document.getElementById('disclaimerModal').style.display = 'none';
     }
   });
   
   const socket = io();
   let room = null;
   let canSend = true;
-  let partnerName = '';
   
   const messagesDiv = document.getElementById('messages');
   const statusDiv = document.getElementById('status');
@@ -63,12 +49,10 @@ const themes = {
   
   socket.on('partnerFound', (data) => {
     room = data.room;
-    partnerName = data.partnerName;
-  
-    document.getElementById("partnerName").innerText = `Partner: ${partnerName}`;
+    document.getElementById("partnerName").innerText = `Partner: ${data.partnerName}`;
     statusDiv.style.display = 'none';
     document.getElementById('chat').style.display = 'block';
-    messagesDiv.innerHTML = `<div class="msg"><i>Beszélgetés indult ${partnerName}-val.</i></div>`;
+    messagesDiv.innerHTML = `<div class="msg"><i>Beszélgetés indult.</i></div>`;
   });
   
   socket.on('partnerLeft', () => {
