@@ -88,9 +88,11 @@ io.on('connection', socket => {
   });
 });
 
+// 💡 Itt a fixált logika
 function tryPairing(socket) {
-  if (waitingSocket && waitingSocket !== socket) {
+  if (waitingSocket && waitingSocket.connected && waitingSocket !== socket) {
     const room = generateRoomID();
+
     activeRooms[socket.id] = room;
     activeRooms[waitingSocket.id] = room;
 
@@ -100,9 +102,12 @@ function tryPairing(socket) {
     socket.emit('partnerFound', { room, partnerName: 'Partner' });
     waitingSocket.emit('partnerFound', { room, partnerName: 'Partner' });
 
-    waitingSocket = null;
+    waitingSocket = null; // Tisztítás mindig
   } else {
-    waitingSocket = socket;
+    // Ne állítsuk be újra, ha már várakozik valaki
+    if (!waitingSocket || !waitingSocket.connected) {
+      waitingSocket = socket;
+    }
     socket.emit('waiting');
   }
 }
