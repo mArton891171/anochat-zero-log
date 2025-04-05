@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>AnoChat – 100% anonimitás</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" href="favicon.png">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Jogvédő figyelmeztetés -->
+  <div id="disclaimerModal">
+    <div>
+      <h3 style="color:#00ffcc;">Figyelmeztetés</h3>
+      <p>Ez az oldal teljesen anonim, semmit nem logol.<br><br>
+        A használat során <b>tilos</b> jogsértő tevékenység (pl. drogkereskedelem, zaklatás, bántalmazás).<br><br>
+        A platform <b>nem vállal felelősséget</b> a felhasználók viselkedéséért.<br><br>
+        A belépéssel <b>elfogadod a fenti feltételeket</b>.
+      </p>
+      <button onclick="acceptDisclaimer()">Elfogadom és belépek</button>
+    </div>
+  </div>
+
+  <h2>AnoChat</h2>
+  <div style="text-align:center; margin-bottom:10px;">
+    <img src="favicon.png" alt="Vlone logó" style="width:80px;">
+  </div>
+  <p>0% log, 100% szólásszabadság. Névtelenül, szabadon.</p>
+
+  <div style="text-align:center;">
+    <button onclick="toggleTheme()" id="themeBtn">Világos mód</button>
+  </div>
+
+  <div id="status">Csatlakozás...</div>
+  <div id="online">Online: 0</div>
+
+  <div id="chat">
+    <div id="messages"></div>
+    <input id="msgInput" placeholder="Írj valamit..." autocomplete="off" />
+    <br>
+    <button onclick="sendMessage()">Küldés</button>
+    <button onclick="newPartner()">Új partner</button>
+  </div>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
