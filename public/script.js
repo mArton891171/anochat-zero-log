@@ -71,11 +71,13 @@ const themes = {
   });
   
   socket.on('partnerLeft', () => {
-    messagesDiv.innerHTML += `<div class="msg"><i>Partner kilépett.</i></div>`;
+    messagesDiv.innerHTML += `<div class="msg"><i>Partner kilépett. Új partner keresése...</i></div>`;
+    socket.emit('newPartner'); // automatikus új párosítás
     statusDiv.innerText = 'Új partner keresése...';
     statusDiv.style.display = 'block';
     document.getElementById('chat').style.display = 'none';
   });
+  
   
   socket.on('message', ({ user, msg, time }) => {
     messagesDiv.innerHTML += `<div class="msg partner"><b>${user}</b> [${time}]: ${msg}</div>`;
