@@ -37,10 +37,26 @@ io.on('connection', socket => {
   socket.on('newPartner', () => {
     const prevRoom = activeRooms[socket.id];
     if (prevRoom) {
+      // Kiküldjük a másik félnek is, hogy le lett választva
       socket.to(prevRoom).emit('partnerLeft');
+    
+      // Megkeressük a másik socketet a room alapján
+      const partnerSocketID = Object.keys(activeRooms).find(
+        id => activeRooms[id] === prevRoom && id !== socket.id
+      );
+    
+      if (partnerSocketID) {
+        const partnerSocket = io.sockets.sockets.get(partnerSocketID);
+        if (partnerSocket) {
+          partnerSocket.leave(prevRoom);
+          delete activeRooms[partnerSocketID];
+        }
+      }
+    
       socket.leave(prevRoom);
       delete activeRooms[socket.id];
     }
+    
 
     tryPairing(socket);
   });
