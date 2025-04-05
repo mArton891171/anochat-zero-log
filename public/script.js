@@ -78,10 +78,10 @@ socket.on('partnerLeft', () => {
   room = null;
   partnerName = '';
   document.getElementById('chat').style.display = 'none';
-  statusDiv.innerText = 'Új partner keresése...';
+  statusDiv.innerText = 'A partnered kilépett. Új partner keresése...';
   statusDiv.style.display = 'block';
 
-  // Automatikusan új partner keresése
+  // 👇 Automatikusan új partner keresése
   socket.emit('newPartner');
 });
 
@@ -120,6 +120,8 @@ function newPartner() {
   document.getElementById('chat').style.display = 'none';
   statusDiv.innerText = 'Új partner keresése...';
   statusDiv.style.display = 'block';
+
+  // 👇 Manuális új partner kérése
   socket.emit('newPartner');
 }
 
