@@ -14,7 +14,6 @@ io.on('connection', socket => {
   userCount++;
   io.emit('onlineCount', userCount);
 
-  // Partnerkeresés indul
   tryPairing(socket);
 
   socket.on('message', ({ room, msg }) => {
@@ -37,26 +36,24 @@ io.on('connection', socket => {
   socket.on('newPartner', () => {
     const prevRoom = activeRooms[socket.id];
     if (prevRoom) {
-      // Kiküldjük a másik félnek is, hogy le lett választva
       socket.to(prevRoom).emit('partnerLeft');
-    
-      // Megkeressük a másik socketet a room alapján
+
       const partnerSocketID = Object.keys(activeRooms).find(
         id => activeRooms[id] === prevRoom && id !== socket.id
       );
-    
+
       if (partnerSocketID) {
         const partnerSocket = io.sockets.sockets.get(partnerSocketID);
         if (partnerSocket) {
           partnerSocket.leave(prevRoom);
           delete activeRooms[partnerSocketID];
+          partnerSocket.emit('partnerLeft');
         }
       }
-    
+
       socket.leave(prevRoom);
       delete activeRooms[socket.id];
     }
-    
 
     tryPairing(socket);
   });
@@ -68,6 +65,20 @@ io.on('connection', socket => {
     const room = activeRooms[socket.id];
     if (room) {
       socket.to(room).emit('partnerLeft');
+
+      const partnerSocketID = Object.keys(activeRooms).find(
+        id => activeRooms[id] === room && id !== socket.id
+      );
+
+      if (partnerSocketID) {
+        const partnerSocket = io.sockets.sockets.get(partnerSocketID);
+        if (partnerSocket) {
+          partnerSocket.leave(room);
+          delete activeRooms[partnerSocketID];
+          partnerSocket.emit('partnerLeft');
+        }
+      }
+
       delete activeRooms[socket.id];
     }
 
