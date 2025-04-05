@@ -102,12 +102,20 @@ const themes = {
   }
   
   function newPartner() {
-    socket.emit('newPartner');
+    // 🔁 Reset minden: töröljük a chatboxot, státuszt, inputot
+    room = null;
+    partnerName = '';
+    input.value = '';
     messagesDiv.innerHTML = `<div class="msg"><i>Új partner keresése...</i></div>`;
-    statusDiv.innerText = 'Új partner keresése...';
-    statusDiv.style.display = 'block';
+  
+    // ⛔ Elrejtjük a chatboxot, megjelenítjük az állapotot
     document.getElementById('chat').style.display = 'none';
-  }
+    statusDiv.style.display = 'block';
+    statusDiv.innerText = 'Új partner keresése...';
+  
+    // 🔌 Új partner kérése a szervertől
+    socket.emit('newPartner');
+  }  
   
   input.addEventListener('keypress', e => {
     if (e.key === 'Enter') sendMessage();
