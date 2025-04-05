@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>AnoChat – 100% anonimitás</title>
+  <title>AnoChat - 100% anonimitás</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="icon" href="favicon.png">
   <link rel="stylesheet" href="style.css">
@@ -35,6 +35,18 @@
   <div id="online">Online: 0</div>
 
   <div id="chat">
+    <div id="partnerInfo" style="text-align:center; padding:10px;">
+      <p id="partnerName">Nincs partner</p>
+      <button id="encryptionBtn" style="display:none;">Titkosítás: <span id="encryptionStatus">Nincs</span></button>
+    </div>
+  
+    <!-- Titkosítás választó -->
+    <div id="encryptionChoice" style="display:none; text-align:center; padding:10px;">
+      <p>Szeretnél titkosított módban beszélni a partnereddel?</p>
+      <button onclick="setEncryption(true)">🔒 Igen, titkosítva</button>
+      <button onclick="setEncryption(false)">💬 Nem, nyíltan</button>
+    </div>
+  
     <div id="messages"></div>
     <input id="msgInput" placeholder="Írj valamit..." autocomplete="off" />
     <br>
@@ -42,7 +54,12 @@
     <button onclick="newPartner()">Új partner</button>
   </div>
 
+  <p style="text-align:center; margin-top:20px;">
+    <a href="rules.html" target="_blank">Szabályzat / Rules</a>
+  </p>
+
   <script src="/socket.io/socket.io.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
   <script src="script.js"></script>
 </body>
 </html>
