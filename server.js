@@ -43,29 +43,14 @@ io.on('connection', (socket) => {
 
     findPartner();
 
-    const blockedDomains = ["grabify.io", "iplogger.org", "bit.ly","tinyurl.com", "bit.do", "adf.ly", "shorte.st", "linkvertise.com", "linkshrink.net", "linktr.ee", "linktree.com", "t.co", "tiny.cc", "is.gd", "v.ht", "rebrandly.com", "cutt.ly", "cuturl.net", "shorturl.at", "shortlink.co", "short.io", "shorte.st", "shrinkme.io", "shrinkme.link"];
-    const lowerMsg = msg.toLowerCase();
-    let flagged = false;
-    
-    for (const domain of blockedDomains) {
-      if (lowerMsg.includes(domain)) {
-        flagged = true;
-        break;
-      }
-    }
-    
-    let cleanMsg = msg.replace(/</g, "&lt;").replace(/>/g, "&gt;");
-    
-    if (flagged) {
-      cleanMsg += " ⚠️ <i>(🪧)</i>";
-    }
-    
-    socket.to(room).emit('message', {
-      user: socket.username,
-      msg: cleanMsg,
-      time: now
+    socket.on('message', ({ room, msg }) => {
+        const now = new Date().toLocaleTimeString();
+        socket.to(room).emit('message', {
+            user: socket.username,
+            msg,
+            time: now
+        });
     });
-    
 
     socket.on('newPartner', () => {
         const currentPartnerId = users[socket.id];

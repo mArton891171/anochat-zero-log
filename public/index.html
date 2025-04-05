@@ -22,6 +22,9 @@
   </div>
 
   <h2>AnoChat</h2>
+  <div style="text-align:center; margin-bottom:10px;">
+    <img src="favicon.png" alt="Vlone logó" style="width:80px;">
+  </div>
   <p>0% log, 100% szólásszabadság. Névtelenül, szabadon.</p>
 
   <div style="text-align:center;">
@@ -32,19 +35,12 @@
   <div id="online">Online: 0</div>
 
   <div id="chat">
-    <div id="partnerInfo" style="text-align:center; padding:10px;">
-      <p id="partnerName">Nincs partner</p>
-    </div>
     <div id="messages"></div>
     <input id="msgInput" placeholder="Írj valamit..." autocomplete="off" />
     <br>
     <button onclick="sendMessage()">Küldés</button>
     <button onclick="newPartner()">Új partner</button>
   </div>
-
-  <p style="text-align:center; margin-top:20px;">
-    <a href="rules.html" target="_blank">Szabályzat / Rules</a>
-  </p>
 
   <script src="/socket.io/socket.io.js"></script>
   <script src="script.js"></script>
