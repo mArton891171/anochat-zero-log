@@ -81,9 +81,12 @@ socket.on('partnerLeft', () => {
   statusDiv.innerText = 'A partnered kilépett. Új partner keresése...';
   statusDiv.style.display = 'block';
 
-  // 👇 Automatikusan új partner keresése
-  socket.emit('newPartner');
+  // BIZTONSÁGI KIEGÉSZÍTÉS:
+  setTimeout(() => {
+    socket.emit('newPartner');
+  }, 100); // Kis delay, hogy a másik oldal előbb lekapcsolódjon
 });
+
 
 socket.on('message', ({ user, msg, time }) => {
   messagesDiv.innerHTML += `<div class="msg partner"><b>${user}</b> [${time}]: ${msg}</div>`;
