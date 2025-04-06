@@ -3,8 +3,18 @@ const form = document.getElementById('chat-form');
 const messageInput = document.getElementById('message');
 const chatBox = document.getElementById('chat-box');
 const status = document.getElementById('status');
+const nickname = document.getElementById('nickname');
+const newPartnerBtn = document.getElementById('new-partner');
 
 let room = '';
+const myName = generateNickname();
+nickname.innerText = `Te: ${myName}`;
+
+function generateNickname() {
+  const colors = ['Kék', 'Zöld', 'Piros', 'Narancs', 'Lila'];
+  const animals = ['Róka', 'Teknős', 'Bagoly', 'Nyúl', 'Oroszlán'];
+  return colors[Math.floor(Math.random() * colors.length)] + ' ' + animals[Math.floor(Math.random() * animals.length)];
+}
 
 socket.on('waiting', () => {
   status.innerText = 'Várakozás egy partnerre...';
@@ -12,8 +22,10 @@ socket.on('waiting', () => {
 
 socket.on('paired', data => {
   room = data.room;
-  status.innerText = 'Partner csatlakozott. Kezdődhet a beszélgetés.';
+  status.innerText = 'Partner csatlakozott. Kezdhetitek a beszélgetést.';
   form.classList.remove('hidden');
+  newPartnerBtn.classList.remove('hidden');
+  chatBox.innerHTML = '';
 });
 
 socket.on('message', msg => {
@@ -35,7 +47,7 @@ socket.on('partner-left', () => {
 
 form.addEventListener('submit', e => {
   e.preventDefault();
-  const msg = messageInput.value;
+  const msg = `${myName}: ${messageInput.value}`;
   socket.emit('message', { room, msg });
 
   const div = document.createElement('div');
@@ -45,4 +57,11 @@ form.addEventListener('submit', e => {
   chatBox.scrollTop = chatBox.scrollHeight;
 
   messageInput.value = '';
+});
+
+newPartnerBtn.addEventListener('click', () => {
+  socket.emit('search-new');
+  status.innerText = 'Új partner keresése...';
+  chatBox.innerHTML = '';
+  form.classList.add('hidden');
 });

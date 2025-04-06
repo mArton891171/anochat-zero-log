@@ -17,5 +17,18 @@
 
   <script src="/socket.io/socket.io.js"></script>
   <script src="script.js"></script>
+  <div class="chat-container">
+    <div id="nickname"></div>
+    <div id="status">Kapcsolódás...</div>
+    <div id="chat-box" class="chat-box"></div>
+  
+    <form id="chat-form" class="hidden">
+      <input type="text" id="message" placeholder="Írj üzenetet..." required>
+      <button type="submit">Küldés</button>
+    </form>
+  
+    <button id="new-partner" class="hidden">Új partner keresése</button>
+  </div>
+  
 </body>
 </html>

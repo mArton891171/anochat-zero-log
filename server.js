@@ -9,32 +9,41 @@ app.use(express.static(path.join(__dirname, 'public')));
 let waitingUser = null;
 
 io.on('connection', socket => {
-  console.log('Egy felhasználó csatlakozott: ' + socket.id);
+  console.log(`Felhasználó csatlakozott: ${socket.id}`);
 
-  if (waitingUser) {
-    // Párosítsuk a várakozóval
-    const room = 'room-' + socket.id + '-' + waitingUser.id;
-    socket.join(room);
-    waitingUser.join(room);
+  function pairUser() {
+    if (waitingUser && waitingUser.id !== socket.id) {
+      const room = `room-${socket.id}-${waitingUser.id}`;
+      socket.join(room);
+      waitingUser.join(room);
 
-    socket.room = room;
-    waitingUser.room = room;
+      socket.room = room;
+      waitingUser.room = room;
 
-    socket.emit('paired', { room });
-    waitingUser.emit('paired', { room });
+      socket.emit('paired', { room });
+      waitingUser.emit('paired', { room });
 
-    waitingUser = null;
-  } else {
-    waitingUser = socket;
-    socket.emit('waiting');
+      waitingUser = null;
+    } else {
+      waitingUser = socket;
+      socket.emit('waiting');
+    }
   }
+
+  pairUser();
 
   socket.on('message', ({ room, msg }) => {
     socket.to(room).emit('message', msg);
   });
 
+  socket.on('search-new', () => {
+    if (socket.room) socket.leave(socket.room);
+    socket.room = null;
+    pairUser();
+  });
+
   socket.on('disconnect', () => {
-    console.log('Lecsatlakozott: ' + socket.id);
+    console.log(`Lecsatlakozott: ${socket.id}`);
     if (waitingUser && waitingUser.id === socket.id) {
       waitingUser = null;
     } else if (socket.room) {
@@ -43,7 +52,6 @@ io.on('connection', socket => {
   });
 });
 
-const PORT = process.env.PORT || 3000;
-http.listen(PORT, () => {
-  console.log(`Szerver fut: http://localhost:${PORT}`);
+http.listen(3000, () => {
+  console.log('Szerver fut a 3000-es porton');
 });

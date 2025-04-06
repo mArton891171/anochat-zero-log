@@ -1,84 +1,89 @@
+/* Alapok maradnak */
 body {
-    font-family: 'Segoe UI', sans-serif;
-    margin: auto;
-    padding: 20px;
-    max-width: 600px;
-    transition: background 0.3s, color 0.3s;
+  font-family: sans-serif;
+  background: #ececec;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.chat-container {
+  background: white;
+  padding: 20px;
+  width: 100%;
+  max-width: 400px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px #ccc;
+  display: flex;
+  flex-direction: column;
+}
+
+#nickname {
+  font-size: 0.9em;
+  color: gray;
+  margin-bottom: 5px;
+  text-align: right;
+}
+
+.chat-box {
+  height: 300px;
+  overflow-y: auto;
+  border: 1px solid #ccc;
+  margin-bottom: 10px;
+  padding: 10px;
+  background: #f9f9f9;
+  font-size: 0.95em;
+}
+
+.message {
+  margin-bottom: 8px;
+  padding: 6px 10px;
+  border-radius: 5px;
+  background: #e1f5fe;
+  word-wrap: break-word;
+}
+
+.partner {
+  background: #c8e6c9;
+}
+
+#chat-form {
+  display: flex;
+}
+
+#message {
+  flex: 1;
+  padding: 10px;
+  font-size: 1em;
+}
+
+button {
+  padding: 10px;
+  font-size: 1em;
+  margin-top: 5px;
+}
+
+.hidden {
+  display: none;
+}
+
+@media screen and (max-width: 500px) {
+  .chat-container {
+    padding: 15px;
+    width: 100%;
+    height: 100vh;
+    box-shadow: none;
+    border-radius: 0;
   }
-  
-  h2 {
-    text-align: center;
-    color: #00ffcc;
+
+  .chat-box {
+    height: 50vh;
   }
-  
-  p {
-    text-align: center;
-    color: #aaa;
+
+  #message {
+    font-size: 1em;
   }
-  
-  #messages {
-    height: 300px;
-    overflow-y: auto;
-    border: 1px solid #00ffcc;
-    padding: 10px;
-    border-radius: 10px;
-    background: #1a1a1a;
-    margin-bottom: 10px;
-  }
-  
-  input {
-    width: calc(100% - 24px);
-    padding: 10px;
-    background-color: #2e2e2e;
-    color: #fff;
-    border: none;
-    border-radius: 5px;
-  }
-  
-  button {
-    padding: 10px 20px;
-    margin-top: 5px;
-    border: none;
-    border-radius: 5px;
-    background: #00ffcc;
-    color: #000;
-    font-weight: bold;
-    cursor: pointer;
-  }
-  
-  button:hover {
-    background: #00ccaa;
-  }
-  
-  .msg {
-    margin-bottom: 6px;
-  }
-  
-  .me {
-    color: #68bad6;
-  }
-  
-  .partner {
-    color: #c42890df;
-  }
-  
-  #disclaimerModal {
-    position: fixed;
-    top: 0; left: 0;
-    width: 100%; height: 100%;
-    background: #000000ee;
-    color: #fff;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 9999;
-  }
-  
-  #disclaimerModal div {
-    background: #111;
-    padding: 20px;
-    border-radius: 10px;
-    max-width: 600px;
-    text-align: center;
-  }
-  
+}
