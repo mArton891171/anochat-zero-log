@@ -3,12 +3,10 @@ const form = document.getElementById('chat-form');
 const messageInput = document.getElementById('message');
 const chatBox = document.getElementById('chat-box');
 const status = document.getElementById('status');
-const nickname = document.getElementById('nickname');
 const newPartnerBtn = document.getElementById('new-partner');
 
 let room = '';
 const myName = generateNickname();
-nickname.innerText = `Te: ${myName}`;
 
 function generateNickname() {
   const colors = ['Kék', 'Zöld', 'Piros', 'Narancs', 'Lila'];
@@ -29,34 +27,23 @@ socket.on('paired', data => {
 });
 
 socket.on('message', msg => {
-  const div = document.createElement('div');
-  div.classList.add('message', 'partner');
-  div.innerText = msg;
-  chatBox.appendChild(div);
-  chatBox.scrollTop = chatBox.scrollHeight;
+  appendMessage(msg);
 });
 
 socket.on('partner-left', () => {
-  const div = document.createElement('div');
-  div.classList.add('message');
-  div.innerText = 'A partnered lecsatlakozott.';
-  chatBox.appendChild(div);
+  appendMessage('🔕 A partnered lecsatlakozott.');
   status.innerText = 'A partner kilépett.';
   form.classList.add('hidden');
 });
 
 form.addEventListener('submit', e => {
   e.preventDefault();
-  const msg = `${myName}: ${messageInput.value}`;
-  socket.emit('message', { room, msg });
-
-  const div = document.createElement('div');
-  div.classList.add('message');
-  div.innerText = msg;
-  chatBox.appendChild(div);
-  chatBox.scrollTop = chatBox.scrollHeight;
-
-  messageInput.value = '';
+  const msg = messageInput.value;
+  if (msg.trim() !== '') {
+    socket.emit('message', { room, msg });
+    appendMessage(`👤 Te: ${msg}`);
+    messageInput.value = '';
+  }
 });
 
 newPartnerBtn.addEventListener('click', () => {
@@ -65,3 +52,11 @@ newPartnerBtn.addEventListener('click', () => {
   chatBox.innerHTML = '';
   form.classList.add('hidden');
 });
+
+function appendMessage(text) {
+  const div = document.createElement('div');
+  div.classList.add('message');
+  div.innerText = text;
+  chatBox.appendChild(div);
+  chatBox.scrollTop = chatBox.scrollHeight;
+}
